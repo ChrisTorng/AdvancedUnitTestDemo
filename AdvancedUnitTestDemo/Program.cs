@@ -1,3 +1,4 @@
+﻿using AdvancedUnitTestDemo.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -7,7 +8,17 @@ namespace AdvancedUnitTestDemo
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            CreateDbIfNotExists();
+
+            host.Run();
+        }
+
+        private static void CreateDbIfNotExists()
+        {
+            using var schoolContext = new SchoolContext();
+            DbInitializer.Initialize(schoolContext);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

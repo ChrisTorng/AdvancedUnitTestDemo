@@ -1,4 +1,54 @@
-﻿@{
+﻿@using AdvancedUnitTestDemo.Model
+@model IEnumerable<Student>
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<h1>Students</h1>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["SearchString"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["NameSortParm"]"
+                   asp-route-searchString="@ViewData["SearchString"]">@Html.DisplayNameFor(model => model.LastName)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstMidName)
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["DateSortParm"]"
+                   asp-route-searchString="@ViewData["SearchString"]">@Html.DisplayNameFor(model => model.EnrollmentDate)</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in this.Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstMidName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnrollmentDate)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

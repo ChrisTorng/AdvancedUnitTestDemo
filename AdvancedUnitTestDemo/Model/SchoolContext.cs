@@ -11,6 +11,6 @@ namespace AdvancedUnitTestDemo.Model
         {
         }
 
-        public DbSet<Student> Students { get; set; }
+        public DbSet<Student> Students { get; set; } = null!;
     }
 }

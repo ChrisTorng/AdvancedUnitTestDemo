@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace AdvancedUnitTestDemo.Model
 {
@@ -6,7 +7,7 @@ namespace AdvancedUnitTestDemo.Model
     {
         public SchoolContext()
             : base(new DbContextOptionsBuilder<SchoolContext>()
-                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SchoolContext;Trusted_Connection=True;MultipleActiveResultSets=true")
+                .UseSqlServer(Startup.Configuration.GetConnectionString("SchoolContext"))
                 .Options)
         {
         }

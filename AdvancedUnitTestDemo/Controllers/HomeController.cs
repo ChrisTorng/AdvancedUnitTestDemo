@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SchoolDatabase;
@@ -54,6 +55,16 @@ namespace AdvancedUnitTestDemo.Controllers
             };
 
             return this.View(nameof(this.Index), searchedStudents.ToArray());
+        }
+
+        public IActionResult Index2([FromBody] HomeIndexModel model)
+        {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            return this.Index(model.SortOrder!, model.SearchString!);
         }
     }
 }

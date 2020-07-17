@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SchoolDatabaseTests;
@@ -47,17 +48,35 @@ namespace SchoolDatabase.Tests
         }
 
         [TestMethod]
-        public void CurrentStudentStartYear_Test()
+        [DataRow(2020, 7, 31, 2017, 8, 1)]
+        [DataRow(2020, 8, 1, 2018, 8, 1)]
+        public void CurrentStudentStartYear_DataRow_Test(
+            int thisYear, int thisMonth, int thisDay,
+            int expectYear, int expectMonth, int expectDay)
         {
             var studentRepostory = new StudentRepository(null!,
-                new MockDateTime(new DateTime(2020, 7, 31)));
+                new MockDateTime(new DateTime(thisYear, thisMonth, thisDay)));
 
-            Assert.AreEqual(new DateTime(2017, 8, 1), studentRepostory.CurrentStudentStartYear);
+            Assert.AreEqual(new DateTime(expectYear, expectMonth, expectDay),
+                studentRepostory.CurrentStudentStartYear);
+        }
 
-            studentRepostory = new StudentRepository(null!,
-                new MockDateTime(new DateTime(2020, 8, 1)));
+        [TestMethod]
+        [DynamicData(nameof(CurrentStudentsTestData), DynamicDataSourceType.Method)]
 
-            Assert.AreEqual(new DateTime(2018, 8, 1), studentRepostory.CurrentStudentStartYear);
+        public void CurrentStudentStartYear_DynamicData_Test(
+            DateTime thisDate, DateTime expectDate)
+        {
+            var studentRepostory = new StudentRepository(null!,
+                new MockDateTime(thisDate));
+
+            Assert.AreEqual(expectDate, studentRepostory.CurrentStudentStartYear);
+        }
+
+        private static IEnumerable<object[]> CurrentStudentsTestData()
+        {
+            yield return new object[] { new DateTime(2020, 7, 31), new DateTime(2017, 8, 1) };
+            yield return new object[] { new DateTime(2020, 8, 1), new DateTime(2018, 8, 1) };
         }
     }
 }

@@ -34,7 +34,7 @@ namespace AdvancedUnitTestDemo.Controllers
 
             var studentRepository = this.studentRepository;
 
-            var students = studentRepository.AllStudents;
+            var students = studentRepository.CurrentStudents;
             IQueryable<Student> searchedStudents = students;
 
             if (!string.IsNullOrEmpty(searchString))

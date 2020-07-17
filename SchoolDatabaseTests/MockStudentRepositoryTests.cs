@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SchoolDatabaseTests;
 
 namespace SchoolDatabase.Tests
 {
@@ -43,6 +44,20 @@ namespace SchoolDatabase.Tests
                 .Where(s => s.FirstMidName == "c").Single();
             Assert.AreEqual("d", student.LastName);
             Assert.AreEqual(new DateTime(3, 3, 3), student.EnrollmentDate);
+        }
+
+        [TestMethod]
+        public void CurrentStudentStartYear_Test()
+        {
+            var studentRepostory = new StudentRepository(null!,
+                new MockDateTime(new DateTime(2020, 7, 31)));
+
+            Assert.AreEqual(new DateTime(2017, 8, 1), studentRepostory.CurrentStudentStartYear);
+
+            studentRepostory = new StudentRepository(null!,
+                new MockDateTime(new DateTime(2020, 8, 1)));
+
+            Assert.AreEqual(new DateTime(2018, 8, 1), studentRepostory.CurrentStudentStartYear);
         }
     }
 }

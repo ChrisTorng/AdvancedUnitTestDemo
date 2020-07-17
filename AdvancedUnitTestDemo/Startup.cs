@@ -28,7 +28,7 @@ namespace AdvancedUnitTestDemo
             services.AddScoped<ISchoolDatabase, SchoolContext>();
 
             services.AddScoped(serviceProvider =>
-                new StudentRepository(serviceProvider.GetRequiredService<ISchoolDatabase>()));
+                new StudentRepository(serviceProvider.GetRequiredService<ISchoolDatabase>(), new DefaultDateTime()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

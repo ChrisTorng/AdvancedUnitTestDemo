@@ -1,17 +1,18 @@
 ﻿using System.Linq;
-using AdvancedUnitTestDemo.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SchoolDatabase;
 
 namespace AdvancedUnitTestDemo.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly StudentRepository studentRepository;
         private readonly ILogger<HomeController> logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(StudentRepository studentRepository, ILogger<HomeController> logger)
         {
+            this.studentRepository = studentRepository;
             this.logger = logger;
         }
 
@@ -27,9 +28,13 @@ namespace AdvancedUnitTestDemo.Controllers
 
             this.ViewData["SearchString"] = searchString;
 
-            using var studentContext = new SchoolContext();
+            ////using var studentContext = new SchoolContext(new DbContextOptionsBuilder<SchoolContext>()
+            ////    .UseSqlServer(Startup.Configuration.GetConnectionString("SchoolContext"))
+            ////    .Options);
 
-            var students = studentContext.Students;
+            var studentRepository = this.studentRepository;
+
+            var students = studentRepository.AllStudents;
             IQueryable<Student> searchedStudents = students;
 
             if (!string.IsNullOrEmpty(searchString))
@@ -48,7 +53,7 @@ namespace AdvancedUnitTestDemo.Controllers
                 _ => searchedStudents.OrderBy(s => s.LastName),
             };
 
-            return this.View(nameof(this.Index), searchedStudents.AsNoTracking().ToArray());
+            return this.View(nameof(this.Index), searchedStudents.ToArray());
         }
     }
 }

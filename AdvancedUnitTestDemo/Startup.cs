@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SchoolDatabase;
 
 namespace AdvancedUnitTestDemo
 {
@@ -19,6 +21,14 @@ namespace AdvancedUnitTestDemo
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<SchoolContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("SchoolContext")));
+
+            services.AddScoped<ISchoolDatabase, SchoolContext>();
+
+            services.AddScoped(serviceProvider =>
+                new StudentRepository(serviceProvider.GetRequiredService<ISchoolDatabase>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

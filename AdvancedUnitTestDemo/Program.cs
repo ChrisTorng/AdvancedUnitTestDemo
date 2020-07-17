@@ -1,6 +1,9 @@
 ﻿using AdvancedUnitTestDemo.Model;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using SchoolDatabase;
 
 namespace AdvancedUnitTestDemo
 {
@@ -17,7 +20,9 @@ namespace AdvancedUnitTestDemo
 
         private static void CreateDbIfNotExists()
         {
-            using var schoolContext = new SchoolContext();
+            using var schoolContext = new SchoolContext(new DbContextOptionsBuilder<SchoolContext>()
+                .UseSqlServer(Startup.Configuration.GetConnectionString("SchoolContext"))
+                .Options);
             DbInitializer.Initialize(schoolContext);
         }
 
